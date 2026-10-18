@@ -269,9 +269,7 @@ export const config = {
    * Social profiles, shown both in the left-hand icon rail and as icons
    * in the Contact section.
    *
-   * NEEDS INPUT: his resume carries no profile links, so these point at
-   * the platform home pages as placeholders. Replace each `url` with his
-   * real profile and they start working. Set `url` to "" to drop an
+   * Both entries point at his real profiles. Set `url` to "" to drop an
    * entry entirely, or add another with any `icon` from the list in
    * `components/socialPlatforms.tsx`.
    */
@@ -292,9 +290,8 @@ export const config = {
    * Resume download. The RESUME button downloads this file directly
    * rather than opening it in a tab.
    *
-   * NEEDS INPUT: save his PDF to Friend-Portfolio/public/resume.pdf.
-   * Until that file exists the link 404s - set this to "" to hide the
-   * button in the meantime.
+   * public/resume.pdf is in place. If it is ever removed the link 404s,
+   * so set this to "" to hide the button rather than leaving it dangling.
    */
   resumeUrl: "/resume.pdf",
   /** Filename the browser saves the download as. */
