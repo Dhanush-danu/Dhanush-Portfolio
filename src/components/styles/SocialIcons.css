@@ -48,7 +48,19 @@
   z-index: 99;
   display: flex;
   gap: 5px;
-  bottom: 40px;
+  /**
+   * Raised from 40px.
+   *
+   * Netlify's "Powered by Netlify" badge is a fixed pill in the
+   * bottom-right corner, roughly 32px tall sitting ~14px off each edge,
+   * so it covered this button on the deployed site. At 100px this clears
+   * the badge with room to spare, and lands level with the upper social
+   * icon on the opposite side, so the two read as one bottom row.
+   *
+   * `right: 0` is deliberate and stays: it aligns the button with the
+   * right edge of the content column, matching the nav above it.
+   */
+  bottom: 100px;
   right: 0;
   width: auto;
   text-wrap: nowrap;
