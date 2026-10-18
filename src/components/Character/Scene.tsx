@@ -203,8 +203,52 @@ const Scene = () => {
       };
     }
 
+    /**
+     * Whether the character is actually on screen.
+     *
+     * The What-I-Do timeline lifts `.character-model` a full viewport
+     * out of frame, so from the work section onwards this renderer was
+     * drawing a character nobody can see - at the full device pixel
+     * ratio, in parallel with the tech stack's own canvas and its
+     * ambient-occlusion pass. Measured on the production build, that
+     * overlap produced a 750ms frame where the tech stack scrolls into
+     * view, which is what made that boundary feel stuck.
+     *
+     * Observed rather than derived from scroll position: this element is
+     * moved by GSAP transforms, so its real position is only reliably
+     * known by observing it.
+     */
+    let onScreen = true;
+    const visibility = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[entries.length - 1];
+        /**
+         * Overlap area, not `isIntersecting`.
+         *
+         * This element is `position: fixed` and exactly one viewport
+         * tall, and the timeline parks it at translateY(-100%) - so its
+         * rect lands at top -900, bottom 0, flush against the top edge.
+         * That is a zero-area touch, which Chrome reports as
+         * `isIntersecting: true`, so the obvious boolean check never
+         * turned the loop off and this kept rendering through the whole
+         * work section (measured: 2307 draw calls a second while off
+         * screen). The intersection rectangle's own height is the
+         * honest measure.
+         */
+        onScreen =
+          entry.intersectionRect.height > 1 && entry.intersectionRect.width > 1;
+      },
+      { threshold: [0, 0.01, 0.1] }
+    );
+    visibility.observe(mount);
+
     const animate = () => {
       frame = requestAnimationFrame(animate);
+      // Consumed unconditionally. Letting it accumulate across a pause
+      // hands the mixer one enormous delta on resume, which snaps the
+      // typing animation forward instead of continuing it.
+      const delta = clock.getDelta();
+      if (!onScreen) return;
       if (headBone) {
         handleHeadRotation(
           headBone,
@@ -216,7 +260,6 @@ const Scene = () => {
         );
         if (screenLight) light.setPointLight(screenLight);
       }
-      const delta = clock.getDelta();
       if (mixer) {
         mixer.update(delta);
       }
@@ -229,6 +272,7 @@ const Scene = () => {
       // The loop used to keep running after unmount, rendering into a
       // disposed renderer for the life of the page.
       cancelAnimationFrame(frame);
+      visibility.disconnect();
       // Stops this mount's progress timer. Left running, it carried on
       // ticking after unmount and overwrote the live mount's 100%.
       progress.stop();

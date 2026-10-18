@@ -130,35 +130,41 @@ function Pointer({ vec = new THREE.Vector3(), isActive }: PointerProps) {
 
 const TechStack = () => {
   const [isActive, setIsActive] = useState(false);
+  const holderRef = useRef<HTMLDivElement>(null);
 
+  /**
+   * Drives both the physics simulation and whether this canvas renders
+   * at all, from whether the section is actually on screen.
+   *
+   * The previous test was `scrollY > work.getBoundingClientRect().top`,
+   * which compares a document-space scroll offset against a
+   * viewport-relative edge. Those are different coordinate spaces, and
+   * the comparison flips true at roughly half the distance to the work
+   * section, so the simulation ran for most of the page.
+   *
+   * That mattered because nothing gated the *rendering*. Measured on the
+   * production build, this canvas issued ~100 draw calls a second while
+   * completely off screen, competing with the character scene for the
+   * frame budget during the work section's pinned horizontal scrub. The
+   * boundary where this section came into view produced a 750ms frame,
+   * the worst in a 47-point sweep of the page, which is what made
+   * scrolling between the work cards and here feel stuck in both
+   * directions.
+   *
+   * An IntersectionObserver is the correct signal, needs no scroll
+   * listener, and is immune to the coordinate-space confusion above.
+   * The margin spins the scene up just before it arrives so the spheres
+   * have settled rather than appearing frozen on the first frame.
+   */
   useEffect(() => {
-    const handleScroll = () => {
-      const work = document.getElementById("work");
-      if (!work) return;
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      setIsActive(scrollY > work.getBoundingClientRect().top);
-    };
-
-    /**
-     * Nav clicks jump the page, so poll briefly afterwards to pick up
-     * the new position. Both these listeners and the poll timers are now
-     * torn down - previously the click handlers were never removed.
-     */
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    const onNavClick = () => {
-      const interval = setInterval(handleScroll, 10);
-      timers.push(setTimeout(() => clearInterval(interval), 1000));
-    };
-
-    const navLinks = document.querySelectorAll<HTMLAnchorElement>(".header a");
-    navLinks.forEach((el) => el.addEventListener("click", onNavClick));
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      navLinks.forEach((el) => el.removeEventListener("click", onNavClick));
-      window.removeEventListener("scroll", handleScroll);
-      timers.forEach(clearTimeout);
-    };
+    const el = holderRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => setIsActive(entries.some((e) => e.isIntersecting)),
+      { rootMargin: "300px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
   const materials = useMemo(() => {
     return textures.map(
@@ -176,11 +182,25 @@ const TechStack = () => {
   }, []);
 
   return (
-    <div className="techstack">
+    <div className="techstack" ref={holderRef}>
       <h2> My Techstack</h2>
 
       <Canvas
         shadows
+        /**
+         * Stops the render loop outright while the section is off
+         * screen, rather than drawing 30 shadowed spheres and an
+         * ambient-occlusion pass into a canvas nobody can see.
+         */
+        frameloop={isActive ? "always" : "never"}
+        /**
+         * Capped. Unset, this renders at the full device pixel ratio,
+         * which is 2 on a retina display and so four times the pixels
+         * of a 1x render - paid on every frame, through an N8AO pass
+         * and a shadow map, at exactly the scroll position that was
+         * dropping frames.
+         */
+        dpr={[1, 1.5]}
         gl={{ alpha: true, stencil: false, depth: false, antialias: false }}
         /* Camera lifted so the cluster of spheres settles lower in the
            frame instead of piling over the section heading. */
