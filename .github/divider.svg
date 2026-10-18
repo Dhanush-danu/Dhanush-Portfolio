@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 6" width="1000" height="6" role="presentation">
+  <!-- Section rule with a light travelling along it. Same 10s cycle as
+       the banner so the two stay in step on the page. -->
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#2b2c31" stop-opacity="0"/>
+      <stop offset="18%"  stop-color="#2b2c31"/>
+      <stop offset="82%"  stop-color="#2b2c31"/>
+      <stop offset="100%" stop-color="#2b2c31" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="spark" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#e6ad55" stop-opacity="0"/>
+      <stop offset="50%"  stop-color="#f3cf98"/>
+      <stop offset="100%" stop-color="#e6ad55" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="2.5" width="1000" height="1" fill="url(#base)"/>
+  <rect y="2" width="190" height="2" fill="url(#spark)" rx="1">
+    <animate attributeName="x" values="-190;-190;1000;1000"
+             keyTimes="0;0.12;0.68;1" dur="10s" repeatCount="indefinite"
+             calcMode="spline" keySplines="0 0 1 1;0.4 0 0.6 1;0 0 1 1"/>
+  </rect>
+</svg>

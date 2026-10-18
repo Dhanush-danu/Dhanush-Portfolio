@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 230" width="1000" height="230" role="img" aria-label="Dhanush S, UI/UX Designer and Marketer">
+  <!--
+    Animated README banner.
+
+    Palette is taken from the site itself: ink #0a0b0e with an amber
+    #e6ad55 accent.
+
+    Everything animates on a single 10s master cycle. Each element
+    expresses its whole behaviour through keyTimes over that one
+    duration rather than chaining begin= offsets, which keeps the loop
+    seamless and means nothing can drift out of sync over time.
+
+    SMIL <animate> is used throughout instead of CSS. GitHub serves
+    this file to an <img>, and SMIL attributes survive that path
+    reliably where a <style> block is not guaranteed to.
+  -->
+  <defs>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#101217"/>
+      <stop offset="55%" stop-color="#0a0b0e"/>
+      <stop offset="100%" stop-color="#07080a"/>
+    </linearGradient>
+
+    <radialGradient id="orb" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e6ad55" stop-opacity="0.34"/>
+      <stop offset="60%" stop-color="#e6ad55" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#e6ad55" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e6ad55" stop-opacity="0"/>
+      <stop offset="35%" stop-color="#e6ad55"/>
+      <stop offset="100%" stop-color="#f3cf98" stop-opacity="0.15"/>
+    </linearGradient>
+
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"  stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Reveals the wordmark left to right, then resets while the
+         group is faded out so the loop has no visible rewind. -->
+    <!--
+      330 is measured, not guessed: the wordmark's rendered bounding box
+      is x 54 to 378.3, so 324.3 wide. An earlier pass used 470, which
+      left the caret stranded 90 units past the final glyph.
+
+      calcMode is linear on purpose. An ease-out spline here reached 95%
+      of the width in the first third of the reveal, so the text simply
+      appeared rather than typing. Constant speed is what reads as
+      typing.
+    -->
+    <mask id="typeMask">
+      <rect x="54" y="58" width="0" height="84" fill="#fff">
+        <animate attributeName="width"
+                 values="0;330;330;330;0;0"
+                 keyTimes="0;0.20;0.88;0.93;0.94;1"
+                 dur="10s" calcMode="linear"
+                 repeatCount="indefinite"/>
+      </rect>
+    </mask>
+
+    <clipPath id="card">
+      <rect x="0" y="0" width="1000" height="230" rx="16"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#card)">
+    <rect width="1000" height="230" fill="url(#ink)"/>
+
+    <!-- Drifting glow, slow and out of phase so the pair never lines up -->
+    <circle cx="150" cy="230" r="230" fill="url(#orb)">
+      <animateTransform attributeName="transform" type="translate"
+                        values="0 20; 70 -10; 0 20"
+                        dur="10s" repeatCount="indefinite"
+                        calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+    </circle>
+    <circle cx="880" cy="20" r="190" fill="url(#orb)">
+      <animateTransform attributeName="transform" type="translate"
+                        values="0 -10; -60 30; 0 -10"
+                        dur="10s" repeatCount="indefinite"
+                        calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+    </circle>
+
+    <!-- Hairline grid, sliding one cell per cycle so it reads as
+         continuous motion rather than a jump at the loop point -->
+    <g stroke="#e6ad55" stroke-opacity="0.055" stroke-width="1">
+      <g>
+        <animateTransform attributeName="transform" type="translate"
+                          from="0 0" to="48 0" dur="10s" repeatCount="indefinite"/>
+        <path d="M-48 0V230M0 0V230M48 0V230M96 0V230M144 0V230M192 0V230M240 0V230M288 0V230M336 0V230M384 0V230M432 0V230M480 0V230M528 0V230M576 0V230M624 0V230M672 0V230M720 0V230M768 0V230M816 0V230M864 0V230M912 0V230M960 0V230M1008 0V230"/>
+      </g>
+      <path d="M0 58H1000M0 115H1000M0 172H1000"/>
+    </g>
+
+    <!-- Wordmark: masked reveal, with the cursor tracking the mask edge -->
+    <g mask="url(#typeMask)">
+      <text x="54" y="126" font-family="SF Pro Display, -apple-system, BlinkMacSystemFont, Segoe UI, Inter, Helvetica, Arial, sans-serif"
+            font-size="68" font-weight="700" letter-spacing="-1.5" fill="#f2f0ea">DHANUSH</text>
+    </g>
+
+    <!-- Caret tracks the mask edge on identical timing, so it always
+         sits against the glyph currently being revealed. -->
+    <rect y="68" width="3" height="66" fill="#e6ad55" rx="1.5">
+      <animate attributeName="x"
+               values="56;386;386;386;56;56"
+               keyTimes="0;0.20;0.88;0.93;0.94;1"
+               dur="10s" calcMode="linear"
+               repeatCount="indefinite"/>
+      <!-- Solid while typing, then blinks on a ~0.9s beat -->
+      <animate attributeName="opacity"
+               values="1;1;0;1;0;1;0;1;0;0"
+               keyTimes="0;0.20;0.29;0.38;0.47;0.56;0.65;0.74;0.9;1"
+               dur="10s" calcMode="discrete"
+               repeatCount="indefinite"/>
+    </rect>
+
+    <!-- Rule draws itself once the word has landed -->
+    <rect x="56" y="150" width="0" height="2" fill="url(#rule)" rx="1">
+      <animate attributeName="width"
+               values="0;0;330;330;0;0"
+               keyTimes="0;0.20;0.32;0.88;0.94;1"
+               dur="10s" calcMode="spline"
+               keySplines="0 0 1 1;0.22 1 0.36 1;0 0 1 1;0 0 1 1;0 0 1 1"
+               repeatCount="indefinite"/>
+    </rect>
+
+    <text x="56" y="182" font-family="SF Mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+          font-size="15" letter-spacing="3.4" fill="#a7a49d" opacity="0">
+      UI / UX DESIGNER &#183; MARKETER
+      <animate attributeName="opacity"
+               values="0;0;1;1;0;0"
+               keyTimes="0;0.30;0.42;0.88;0.94;1"
+               dur="10s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- Stack chips, staggered in -->
+    <g font-family="SF Mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" letter-spacing="1.4">
+      <g opacity="0">
+        <animate attributeName="opacity" values="0;0;1;1;0;0"
+                 keyTimes="0;0.46;0.56;0.88;0.94;1" dur="10s" repeatCount="indefinite"/>
+        <rect x="640" y="92" width="86" height="27" rx="13.5" fill="none" stroke="#2b2c31"/>
+        <text x="683" y="110" fill="#a7a49d" text-anchor="middle">REACT</text>
+      </g>
+      <g opacity="0">
+        <animate attributeName="opacity" values="0;0;1;1;0;0"
+                 keyTimes="0;0.51;0.61;0.88;0.94;1" dur="10s" repeatCount="indefinite"/>
+        <rect x="736" y="92" width="74" height="27" rx="13.5" fill="none" stroke="#2b2c31"/>
+        <text x="773" y="110" fill="#a7a49d" text-anchor="middle">GSAP</text>
+      </g>
+      <g opacity="0">
+        <animate attributeName="opacity" values="0;0;1;1;0;0"
+                 keyTimes="0;0.56;0.66;0.88;0.94;1" dur="10s" repeatCount="indefinite"/>
+        <rect x="820" y="92" width="112" height="27" rx="13.5" fill="none" stroke="#e6ad55" stroke-opacity="0.45"/>
+        <text x="876" y="110" fill="#e6ad55" text-anchor="middle">THREE.JS</text>
+      </g>
+    </g>
+
+    <!-- Specular sweep across the whole card, once per cycle -->
+    <rect x="-320" y="0" width="300" height="230" fill="url(#sheen)">
+      <animate attributeName="x" values="-320;-320;1000;1000"
+               keyTimes="0;0.60;0.80;1" dur="10s" repeatCount="indefinite"/>
+    </rect>
+
+    <rect x="0.5" y="0.5" width="999" height="229" rx="16" fill="none" stroke="#2b2c31"/>
+  </g>
+</svg>

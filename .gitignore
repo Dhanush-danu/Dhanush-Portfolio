@@ -26,3 +26,5 @@ dist-ssr
 
 backup/
 .env
+# Source screenshots dropped in the repo root
+/Dhanush Portfolio.png

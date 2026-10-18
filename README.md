@@ -1,65 +1,128 @@
-# My Portfolio Website - Overview 🚀
+<div align="center">
 
-This repository contains the open-source version of my personal portfolio website.  
-Feel free to explore the code and use it for learning and inspiration.
+<img src=".github/banner.svg" alt="Dhanush S, UI/UX Designer and Marketer" width="100%">
 
----
+<br>
 
-## ⚠️ Usage Notice
+**An interactive 3D portfolio.** React, TypeScript, GSAP and Three.js.
 
-This project is shared for learning purposes only.
+<br>
 
-Please do NOT:
-- Clone or replicate the full website or design
-- Repost it with minor content changes
-- Use this project for commercial/client work
-- Create tutorials or content using this exact project
+<img src="https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=white&labelColor=0a0b0e" alt="React 18">
+<img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white&labelColor=0a0b0e" alt="TypeScript 5">
+<img src="https://img.shields.io/badge/Vite-5-646CFF?style=flat-square&logo=vite&logoColor=white&labelColor=0a0b0e" alt="Vite 5">
+<img src="https://img.shields.io/badge/GSAP-3.15-88CE02?style=flat-square&logo=greensock&logoColor=white&labelColor=0a0b0e" alt="GSAP 3.15">
+<img src="https://img.shields.io/badge/Three.js-0.168-e6ad55?style=flat-square&logo=threedotjs&logoColor=white&labelColor=0a0b0e" alt="Three.js">
+<img src="https://img.shields.io/badge/Node-22-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white&labelColor=0a0b0e" alt="Node 22">
 
-If you use parts of the code, you must provide proper credit linking back to the original repository.
+</div>
 
-Build your own version — don’t just copy.
+<img src=".github/divider.svg" alt="" width="100%">
 
-— Moncy Yohannan
+<div align="center">
+  <img src=".github/preview.png" alt="The portfolio hero: a 3D character, with the name and role headings either side" width="100%">
+</div>
 
----
+<img src=".github/divider.svg" alt="" width="100%">
 
-## 🛠️ Instructions
+## What it is
 
-I have modified the GSAP Club plugins using trial versions.  
-⚠️ Note: Trial plugins cannot be used for production or hosting.
+A single-page portfolio built around a 3D character who sits at a desk and
+types. The page is one continuous scroll: the camera pulls back from a
+close-up of his face, the desk assembles around him, the monitor lights, and
+the work section slides past horizontally while the page is pinned.
 
-For official GSAP Club plugins, refer here:  
-https://gsap.com/docs/v3/Installation/
+| | |
+|---|---|
+| **Scroll choreography** | GSAP ScrollSmoother drives the page; ScrollTrigger timelines move the camera, rotate the character and assemble the desk |
+| **3D scene** | Three.js with a Draco-compressed model, a runtime-generated gradient environment map, and pointer-tracked head rotation |
+| **Work section** | Seven projects in a horizontally-scrolling row, pinned while it travels, each with a real screenshot of the live deployment |
+| **Loading screen** | Progress eased on a clock rather than guessed, held to a floor so the intro can be read, then a circular wipe into the page |
+| **Responsive** | Verified 320px to 1920px |
 
----
+<img src=".github/divider.svg" alt="" width="100%">
 
-## ⚙️ Tech Stack
+## Quick start
 
-React • TypeScript • GSAP • Three.js • WebGL • HTML • CSS • JavaScript
+```bash
+npm install
+npm run dev          # http://localhost:5173
+```
 
----
+```bash
+npm run build        # -> dist/
+npm run preview
+```
 
-## 🎨 Assets Usage
+Node 22, pinned in `.nvmrc`. The dev server binds loopback only; there is
+deliberately no `--host` flag on the `dev` script.
 
-Some 3D assets included in this repository are free to use for learning purposes.
+<img src=".github/divider.svg" alt="" width="100%">
 
-However:
+## Where the content lives
 
-- The original 3D avatar used on my live portfolio is NOT included in this repository
-- That avatar is a custom asset created over ~1 month
-- It is not open source and not available for reuse
+**Everything a visitor reads is in `src/config.ts`.** Edit there, not in the
+components. One file holds the hero text, the About copy, the two What-I-Do
+cards, the career timeline, the project list, the tech-stack logos, the
+contact details, the social links and the nav labels.
 
-Any usage, extraction, or redistribution of that avatar from my live website is strictly prohibited.
+```
+src/
+├── config.ts                  all visitor-facing content
+├── index.css                  palette: ten CSS custom properties
+└── components/
+    ├── Character/             Three.js scene, lighting, animation
+    ├── utils/GsapScroll.ts    scroll choreography
+    └── styles/                per-component CSS
+```
 
----
+Change the ten palette custom properties in the `:root` block of
+`src/index.css` and the whole site reskins at once. It currently runs a warm
+amber on a deep ink base.
 
-![Protfolio-Preview](https://github.com/user-attachments/assets/3c4557e7-6392-4928-b8a9-7b2476ef4edd)
+<img src=".github/divider.svg" alt="" width="100%">
 
----
+## Provenance and licence
 
-## 📄 License
+> [!IMPORTANT]
+> **This repository is private, and that is a licence requirement rather than
+> a preference.**
 
-This project is licensed under the Personal Portfolio License (PPL) v1.0.
+Built on the [MoncyDev portfolio template](https://www.moncy.dev), which ships
+a **Personal Portfolio License (PPL) v1.0**. See [`LICENSE`](LICENSE) for the
+full text.
 
-See the LICENSE file for full details
+That licence permits studying the code and building your own work from it. It
+**prohibits** cloning the whole design, redistributing it, commercial use, and
+re-using the original assets.
 
+So, concretely:
+
+- Publishing this repository, or deploying it to a public URL, is the specific
+  thing the licence prohibits.
+- `netlify.toml` and `.nvmrc` are present because the build is configured and
+  tested, **not** as an invitation to deploy it. A Netlify deploy is a public
+  URL.
+- If this should go live, ask the author first: **connect@moncy.dev**
+
+One ambiguity worth recording: the template's own README stated that the custom
+avatar from the author's live site is *not* included in the repository, and
+that the bundled 3D assets are free to use for learning. That conflicts with
+the blanket asset clause in `LICENSE`. The bundled model is therefore probably
+the learning-permitted one, but it is unconfirmed, which is another reason to
+ask before publishing.
+
+<img src=".github/divider.svg" alt="" width="100%">
+
+## Credits
+
+**Template** · [Moncy Yohannan](https://www.moncy.dev) · design and 3D assets, under PPL v1.0
+
+**Content and build** · Lokesh T
+
+**Portfolio of** · Dhanush S · [LinkedIn](https://www.linkedin.com/in/dhanush-s-63a003322/)
+
+<div align="center">
+<br>
+<sub>Built with React, TypeScript, GSAP and Three.js.</sub>
+</div>
