@@ -116,7 +116,6 @@ ask before publishing.
 
 ## Credits
 
-**Template** · [Moncy Yohannan](https://www.moncy.dev) · design and 3D assets, under PPL v1.0
 
 **Content and build** · Lokesh T
 
