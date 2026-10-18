@@ -1,0 +1,94 @@
+.about-section {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  place-items: center;
+  position: relative;
+  opacity: 1;
+  height: auto;
+  width: var(--cWidth);
+  margin: auto;
+}
+.about-me {
+  padding: 50px 0px;
+  padding-bottom: 0;
+  width: 500px;
+  max-width: calc(100% - 15px);
+}
+.about-me h3 {
+  font-size: 25px;
+  text-transform: uppercase;
+  letter-spacing: 7px;
+  font-weight: 400;
+  color: var(--accentColor);
+}
+
+.about-me p {
+  font-size: 30px;
+  /*
+   * Was 600 weight, 33px, with a 36px line-height, so barely more than
+   * the glyph height. Heavy and tight at display size, which is what
+   * made it hard to read. Lighter weight, looser leading, and letter
+   * spacing back to normal.
+   */
+  font-weight: 450;
+  line-height: 1.5;
+  letter-spacing: 0.2px;
+  margin-bottom: 0.9em;
+  color: #dfdcd5;
+}
+
+@media only screen and (min-width: 600px) {
+  .about-section {
+    justify-content: center;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .about-me {
+    width: 500px;
+    max-width: calc(100% - 70px);
+    transform: translateY(0%);
+  }
+  .about-section {
+    opacity: 1;
+  }
+}
+@media only screen and (min-width: 1025px) {
+  .about-section {
+    width: var(--cWidth);
+    justify-content: right;
+    max-width: 1920px;
+    /*
+     * Taller than one viewport on purpose, and taller again at 2.9.
+     *
+     * The copy is vertically centred, so this height is pure scroll
+     * runway - the text does not move, it just takes longer to pass.
+     * At 1.45 the measured legible travel was 480px, about half a
+     * screen, which a single trackpad swipe clears: people went hero ->
+     * "What I do" without reading any of this. Scroll distance is also
+     * divided by ScrollSmoother's `speed: 1.7`, so content height buys
+     * noticeably less wheel travel than it looks like it should.
+     *
+     * Retune with /tmp/iss/pacing.mjs, which reports the legible travel
+     * per stage. The fade-out in utils/GsapScroll.ts (`aboutFade`) uses
+     * absolute scroll positions and must be moved with this.
+     */
+    height: calc(var(--vh) * 2.9);
+    padding: 0px;
+    opacity: 1;
+  }
+  .about-me {
+    padding: 0px;
+    width: 50%;
+  }
+  .about-me p {
+    font-size: 1.45vw;
+    line-height: 1.55;
+  }
+}
+@media only screen and (min-width: 1950px) {
+  .about-me p {
+    font-size: 2rem;
+    line-height: 1.55;
+  }
+}

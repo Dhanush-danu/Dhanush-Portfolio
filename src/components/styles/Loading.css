@@ -1,0 +1,629 @@
+.loading-screen {
+  position: fixed;
+  width: 100vw;
+  height: var(--vh);
+  /* background-image: linear-gradient(#cbb1ff, #d8c4ff); */
+  background-color: var(--textColor);
+  z-index: 999999999;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  /* The pill is scaled up well past the viewport during the reveal. */
+  overflow: hidden;
+}
+.loading-button {
+  padding: 20px 50px;
+  border-radius: 100px;
+  background-color: #000;
+  overflow: hidden;
+  font-size: 18px;
+  font-weight: 500;
+  position: relative;
+  z-index: 9;
+}
+.loading-button::before {
+  content: "";
+  background-color: #ffffff;
+  top: var(--mouse-y);
+  left: var(--mouse-x);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  opacity: 1;
+  position: absolute;
+  z-index: 99;
+  filter: blur(60px);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+.loading-button:hover::before {
+  opacity: 1;
+}
+.loading-clicked .loading-button::before {
+  opacity: 0;
+}
+
+.loading-wrap {
+  --Lsize: 145px;
+  padding: 6px;
+  position: relative;
+  min-width: 0px;
+  min-height: 0px;
+  border-radius: 100px;
+  background-color: #000;
+  overflow: hidden;
+  /* Only transform and box-shadow - see `.loading-clicked`. */
+  transition: transform 0.8s ease-in-out, box-shadow 0.8s ease-in-out;
+  transition-delay: 0.2s;
+  transform: scale(1);
+  will-change: transform;
+  box-shadow: 0px 15px 15px 0px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/**
+ * The reveal: the pill swells until it covers the screen.
+ *
+ * This was animated with `min-width: calc(100vw + 5000px)` and a
+ * matching `min-height`, which are *layout* properties - so every frame
+ * of the 0.8s transition re-ran layout and repainted an element several
+ * thousand pixels across, and the growth also pushed the element past
+ * the viewport for real. Sampled with rAF it advanced in three or four
+ * visible jumps rather than a smooth sweep, which is what "gets stuck
+ * in the middle" looked like.
+ *
+ * A uniform scale produces the same expanding-blob effect purely on the
+ * compositor. 20 is generous on purpose: the pill is roughly 362x110, so
+ * this is ~7240x2200 with a ~1000px corner radius, which fully covers
+ * any viewport we care about from the centre outwards, including very
+ * wide and very tall ones.
+ */
+.loading-clicked {
+  transition-delay: 0ms;
+  transition-timing-function: cubic-bezier(0.33, 0.11, 1, 0.72);
+  transform: scale(20);
+  box-shadow: none;
+}
+.loading-clicked .loading-button {
+  overflow: visible;
+}
+.loading-hover {
+  background-color: var(--accentColor);
+  width: 250px;
+  height: 120px;
+  position: absolute;
+  top: var(--mouse-y);
+  left: var(--mouse-x);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(30px);
+  opacity: 1;
+  transition: opacity 500ms;
+}
+
+.loading-wrap:hover .loading-hover {
+  opacity: 1;
+}
+.loading-clicked:hover .loading-hover,
+.loading-clicked .loading-hover {
+  opacity: 0;
+}
+.loading-content {
+  position: relative;
+  background-color: #000;
+  width: 100%;
+  overflow: hidden;
+  transition: 0.6s;
+  text-transform: uppercase;
+}
+.loading-content-in {
+  position: relative;
+  width: var(--Lsize);
+  overflow: hidden;
+}
+.loading-content2 {
+  position: relative;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  width: var(--Lsize);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  text-align: center;
+  transition: 1s;
+  max-width: var(--Lsize);
+}
+.loading-clicked .loading-content2 {
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.loading-content span {
+  font-weight: 300;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  opacity: 0.7;
+}
+.loading-box {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translate(100%, -50%);
+  width: 15px;
+  height: 25px;
+  background-color: white;
+  animation: blink 1s linear infinite;
+}
+.loading-icon {
+  transform: scale(0);
+  opacity: 0;
+  transition: 0.5s;
+  transition-delay: 0.5s;
+}
+
+.loading-complete .loading-icon {
+  transform: scale(1);
+  opacity: 1;
+}
+.loading-clicked .loading-icon {
+  transition-delay: 0s;
+  transition: 1s;
+  transform: translateX(200px);
+}
+.loading-clicked .loading-content2 {
+  overflow: visible;
+}
+.loading-clicked .loading-content2 span {
+  transition: 1s;
+  transform: translateY(100px);
+  opacity: 0;
+}
+.loading-container {
+  position: absolute;
+  width: 100%;
+  max-width: var(--Lsize);
+  /* height: 45px; */
+  top: 50%;
+  transition: 1s;
+  left: 50px;
+  z-index: 9;
+  transform: translateY(-50%);
+}
+
+.loading-complete .loading-container {
+  max-width: 0px;
+}
+.loading-header {
+  width: var(--cWidth);
+  max-width: var(--cMaxWidth);
+  position: fixed;
+  z-index: 9999999999;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 20px 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  color: var(--backgroundColor);
+}
+.loader-title {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+}
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.loading-complete .loading-box {
+  animation: blinkDone 0.3s forwards;
+  animation-delay: 1s;
+  opacity: 1;
+}
+@keyframes blinkDone {
+  to {
+    opacity: 0;
+  }
+}
+
+.loaderGame-container {
+  width: 200px;
+  transition: 0.3s;
+  height: 100px;
+  overflow: hidden;
+  position: relative;
+  transform: scale(0.4);
+  transform-origin: top right;
+}
+.loader-out .loaderGame-container {
+  opacity: 0;
+}
+.loaderGame-in {
+  width: 1200px;
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  animation: loaderGame 7s linear infinite;
+}
+@keyframes loaderGame {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(-300px);
+  }
+}
+.loaderGame-line {
+  float: left;
+  margin: 0px 20px;
+  margin-bottom: 40px;
+  position: relative;
+  width: 10px;
+  height: 60px;
+  background-color: #000;
+  display: block;
+}
+.loaderGame-line:nth-child(2n) {
+  margin-top: 40px;
+  margin-bottom: 0px;
+}
+
+.loaderGame-ball {
+  position: absolute;
+  left: 20%;
+  top: 0%;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: var(--accentColor);
+  animation: ball25 7s infinite;
+  transform: translateY(10px);
+  animation-timing-function: cubic-bezier(0.3, 1.18, 0.63, 1.28);
+}
+.loading-marquee {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  color: var(--backgroundColor);
+  font-size: 60px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.loading-marquee span {
+  padding: 0px 50px;
+  position: relative;
+}
+.loading-marquee span::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background-color: var(--backgroundColor);
+  position: absolute;
+  top: 50%;
+  border-radius: 50px;
+  left: 0px;
+  transform: translate(-50%, -50%);
+}
+@keyframes ball25 {
+  0% {
+    transform: translateY(70px);
+  }
+  15% {
+    transform: translateY(10px);
+  }
+  30% {
+    transform: translateY(70px);
+  }
+  45% {
+    transform: translateY(10px);
+  }
+  67% {
+    transform: translateY(70px);
+  }
+  80% {
+    transform: translateY(10px);
+  }
+  90% {
+    transform: translateY(70px);
+  }
+  100% {
+    transform: translateY(70px);
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+  .loading-wrap {
+    --Lsize: 210px;
+  }
+  .loading-button {
+    padding: 30px 70px;
+    font-size: 25px;
+  }
+  .loading-container {
+    left: 70px;
+  }
+  .loading-marquee {
+    font-size: 100px;
+  }
+}
+@media only screen and (min-width: 500px) {
+  .loading-header {
+    padding: 20px 0px;
+  }
+  .loader-title {
+    font-size: 16px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .loading-header {
+    padding: 35px 0px;
+  }
+  .loader-title {
+    font-size: 18px;
+  }
+}
+
+/* ===================================================================
+   LOADING SCREEN BACKGROUND
+   The screen is the palette inverted - a warm off-white ground with ink
+   text - and it used to be a flat fill with the marquee sliding across
+   it. These layers give it some life while the model loads.
+
+   Everything here animates `transform` and `opacity` only, so it stays
+   on the compositor: the main thread is busy decrypting, Draco-decoding
+   and shader-compiling the character at this exact moment, and anything
+   that forced layout or repaint would make the real work slower. For
+   the same reason the soft edges are baked into radial gradients rather
+   than produced with an animated `filter: blur`.
+   =================================================================== */
+.loading-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Fine technical grid, echoing the dashed card borders used on the
+   site. Masked to fade out towards the edges so it reads as texture
+   rather than graph paper. */
+.loading-bg-grid {
+  position: absolute;
+  inset: -10%;
+  /* The edge fade is painted in this same layer, as a gradient in the
+     screen's own background colour sitting on top of the lines, rather
+     than with `mask-image`. The mask was the most expensive thing on
+     the loading screen by a clear margin - 1479ms of the 2475ms total,
+     because it adds a whole-layer compositing pass on every frame of
+     the drift. This is one paint and then free to move. */
+  background-image: radial-gradient(
+      ellipse at 50% 50%,
+      rgba(237, 235, 230, 0) 38%,
+      rgba(237, 235, 230, 0.75) 72%,
+      rgb(237, 235, 230) 88%
+    ),
+    linear-gradient(to right, rgba(10, 11, 14, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10, 11, 14, 0.06) 1px, transparent 1px);
+  background-size: 100% 100%, 68px 68px, 68px 68px;
+  animation: loadingGridDrift 24s linear infinite;
+}
+@keyframes loadingGridDrift {
+  to {
+    transform: translate3d(68px, 68px, 0);
+  }
+}
+
+/* The concentric rings and the film grain that used to live here were
+   removed on measurement, not taste: 991ms and 987ms respectively of
+   extra time before the loading screen could finish, for two of the
+   least noticeable effects on it. A full-screen repeating-radial
+   gradient and a full-screen noise raster are both costly to composite,
+   and this screen is shown at the exact moment the main thread is
+   decrypting, Draco-decoding and shader-compiling the character. The
+   drifting light below carries the warmth on its own. */
+
+/* Warm light pooling and drifting. Pre-blurred as gradients. */
+.loading-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform, opacity;
+}
+.loading-bg-orb1 {
+  width: 62vmax;
+  height: 62vmax;
+  top: -22vmax;
+  left: -16vmax;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(230, 173, 85, 0.5) 0%,
+    rgba(243, 207, 152, 0.26) 38%,
+    rgba(243, 207, 152, 0) 70%
+  );
+  animation: loadingOrb1 19s ease-in-out infinite;
+}
+.loading-bg-orb2 {
+  width: 54vmax;
+  height: 54vmax;
+  right: -18vmax;
+  bottom: -20vmax;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(154, 106, 38, 0.34) 0%,
+    rgba(230, 173, 85, 0.2) 42%,
+    rgba(230, 173, 85, 0) 72%
+  );
+  animation: loadingOrb2 23s ease-in-out infinite;
+}
+/* Two drifting pools rather than three: the orbs together cost 991ms,
+   and the third added little over the other two. */
+@keyframes loadingOrb1 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(14vmax, 9vmax, 0) scale(1.16);
+    opacity: 1;
+  }
+}
+@keyframes loadingOrb2 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.08);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate3d(-13vmax, -8vmax, 0) scale(0.9);
+    opacity: 1;
+  }
+}
+
+
+/* A single band of light crossing the screen, so there is one clearly
+   directional movement among all the drifting. */
+.loading-bg-sweep {
+  position: absolute;
+  top: -30%;
+  left: -60%;
+  width: 45%;
+  height: 160%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.55) 45%,
+    rgba(255, 226, 187, 0.3) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(14deg);
+  animation: loadingSweep 7.5s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  will-change: transform, opacity;
+}
+@keyframes loadingSweep {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(14deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(360%, 0, 0) rotate(14deg);
+    opacity: 0;
+  }
+}
+
+/* Film grain, to stop the large flat gradients from banding.
+   Deliberately static and un-blended. It was animated on a 0.7s step
+   loop with `mix-blend-mode: multiply`, which is the single most
+   expensive thing you can put on a full-screen layer: the blend forces
+   a whole-viewport compositing pass on every step. Together with the
+   oversized rings that cost 3.25s of extra time before the loading
+   screen could finish - a decoration slowing down the load it exists to
+   cover. A fixed overlay gives the same texture for nothing. */
+/* Film grain removed - see the note above the orbs. */
+
+/* The marquee and the button must sit above all of the above. */
+.loading-marquee,
+.loading-wrap {
+  z-index: 2;
+}
+
+/* Honest progress along the bottom edge, driven by the same percentage
+   as the counter in the button. */
+.loading-rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background-color: rgba(10, 11, 14, 0.1);
+  z-index: 3;
+  overflow: hidden;
+}
+.loading-rail-fill {
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  transform: scaleX(0);
+  background-image: linear-gradient(
+    to right,
+    var(--accentDeep),
+    var(--accentColor) 60%,
+    var(--accentGlow)
+  );
+  transition: transform 180ms linear;
+}
+.loading-rail-out {
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+
+/* The decoration stops the instant the reveal starts.
+   The reveal is the most frame-hungry moment on the page - the black
+   pill expands to cover the viewport while React unmounts the loading
+   screen - and it was running at 6fps with a visible 266ms freeze
+   before it even began moving. Leaving four layers animating underneath
+   something that is about to be completely hidden by them buys nothing.
+   `visibility` rather than `display` so no layout is triggered. */
+.loading-bg-out {
+  visibility: hidden;
+}
+.loading-bg-out > div {
+  animation-play-state: paused;
+}
+
+/* Same reasoning: this is a 250x120 element with a 30px blur sitting
+   inside the pill that is being scaled up. It is already faded out by
+   `.loading-clicked`, but an invisible blurred layer is still a blurred
+   layer to the compositor. */
+.loading-clicked .loading-hover {
+  display: none;
+}
+
+/* The pill's contents are scaled 20x along with it, so they have to be
+   gone fast - at that magnification even a faint trace of the label
+   would fill the screen. */
+.loading-clicked .loading-container,
+.loading-clicked .loading-content,
+.loading-clicked .loading-content2 {
+  opacity: 0;
+  transition: opacity 0.12s linear;
+}
+
+/* The whole decorative stack is motion, so honour a reduced-motion
+   preference: keep the colour, drop the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .loading-bg-grid,
+  .loading-bg-rings,
+  .loading-bg-orb,
+  .loading-bg-sweep,
+  .loading-bg-grain {
+    animation: none;
+  }
+  .loading-bg-sweep {
+    opacity: 0;
+  }
+}

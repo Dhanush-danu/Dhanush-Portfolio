@@ -1,0 +1,82 @@
+.header {
+  display: flex;
+  max-width: var(--cMaxWidth);
+  width: var(--cWidth);
+  justify-content: space-between;
+  /* Horizontal padding pulls the nav links in off the right edge, where
+     they previously sat hard against the viewport. */
+  padding: 20px 10px 20px 0px;
+  margin-bottom: -100px;
+  box-sizing: border-box;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  z-index: 9999;
+}
+.header ul {
+  font-size: 11px;
+  display: flex;
+  /*
+   * Single row at every width. This used to stack vertically below
+   * 500px, which with four nav items made the fixed header ~136px tall
+   * on a phone and pushed section headings underneath it.
+   * flex-wrap is a safety net rather than the normal path.
+   */
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  column-gap: 16px;
+  row-gap: 6px;
+  align-items: center;
+}
+.header ul li {
+  margin-left: 0px;
+  letter-spacing: 1px;
+  color: #ccc;
+  font-weight: 600;
+  cursor: pointer;
+}
+.navbar-title {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+}
+@media only screen and (min-width: 500px) {
+  .header {
+    padding: 20px 0px;
+  }
+  .header ul {
+    font-size: 14px;
+    column-gap: 28px;
+  }
+  .header ul li {
+    color: var(--textColor);
+  }
+  .navbar-title {
+    font-size: 16px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .header {
+    /* ~5% of the viewport of breathing room on the right so the links
+       aren't flush against the edge. */
+    padding: 35px 5vw 35px 0px;
+  }
+  .header ul {
+    /* Four nav items now, so the original 80px gap is too wide. */
+    column-gap: 48px;
+    font-size: 16px;
+  }
+  .navbar-title {
+    font-size: 18px;
+  }
+}
+@media only screen and (min-width: 1700px) {
+  .header {
+    padding-right: 7vw;
+  }
+}
