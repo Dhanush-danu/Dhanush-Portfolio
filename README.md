@@ -84,38 +84,42 @@ amber on a deep ink base.
 
 ## Provenance and licence
 
-> [!IMPORTANT]
-> **This repository is private, and that is a licence requirement rather than
-> a preference.**
-
 Built on the [MoncyDev portfolio template](https://www.moncy.dev), which ships
 a **Personal Portfolio License (PPL) v1.0**. See [`LICENSE`](LICENSE) for the
 full text.
 
-That licence permits studying the code and building your own work from it. It
-**prohibits** cloning the whole design, redistributing it, commercial use, and
-re-using the original assets.
+> [!IMPORTANT]
+> **Permission for this specific deployment was granted by the author
+> directly**, by email and phone in October 2026. That permission covers this
+> site. It is not a licence for anyone else to redeploy this code.
 
-So, concretely:
+The licence permits studying the code and building your own work from it. It
+prohibits cloning the whole design, redistributing it, and commercial use. Two
+clauses are worth reading before changing anything here:
 
-- Publishing this repository, or deploying it to a public URL, is the specific
-  thing the licence prohibits.
-- `netlify.toml` and `.nvmrc` are present because the build is configured and
-  tested, **not** as an invitation to deploy it. A Netlify deploy is a public
-  URL.
-- If this should go live, ask the author first: **connect@moncy.dev**
+- **Attribution is mandatory.** The licence requires clear credit to "Moncy
+  Yohannan" with a link to the original source wherever any part of the project
+  is used. That is the Template line under [Credits](#credits); leave it in
+  place.
+- **The 3D assets are not covered by the licence at all.** `LICENSE` puts the
+  avatar, models, textures and visuals outside its own grant, as proprietary
+  content needing explicit permission. This deployment has that permission;
+  a fork would not.
 
-One ambiguity worth recording: the template's own README stated that the custom
-avatar from the author's live site is *not* included in the repository, and
-that the bundled 3D assets are free to use for learning. That conflicts with
-the blanket asset clause in `LICENSE`. The bundled model is therefore probably
-the learning-permitted one, but it is unconfirmed, which is another reason to
-ask before publishing.
+Enforcement is not theoretical. The licence names DMCA takedowns and legal
+action, so if the site is ever rehosted, handed on, or used as the basis of
+another portfolio, get fresh permission: **connect@moncy.dev**
+
+This supersedes an earlier note here that read the bundled 3D model as possibly
+free for learning. `LICENSE` is unambiguous that it is not, and the template's
+own README said the avatar was excluded from the repository, which was the
+source of that confusion.
 
 <img src=".github/divider.svg" alt="" width="100%">
 
 ## Credits
 
+**Template** · [Moncy Yohannan](https://www.moncy.dev) · design and 3D assets, under PPL v1.0
 
 **Content and build** · Lokesh T
 
